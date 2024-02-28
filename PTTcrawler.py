@@ -19,7 +19,7 @@ class PTTcrawler:
         else:
             self.soup = BeautifulSoup(response.text, 'html5lib')
     
-    def title(self):
+    def title(self) -> str:
         title = self.soup.find('title').text
         pattern = r'\[.*?\] .*?(?=\s+-)'
         match = re.search(pattern, title)
@@ -28,18 +28,29 @@ class PTTcrawler:
         else:
             return "without title"
         
-    def content(self):
+    def content(self) -> str:
         content = self.soup.find('div', id='main-content', class_='bbs-screen bbs-content')
         return content.text
-
-        
     
-
-
+    def get_push(self) -> list[str]:
+        content = self.soup.find_all('div', class_='push')
+        return [u.text for u in content]
+    
+    def count_push(self)-> dict:
+        push_list = self.get_push()
+        result = {'推': 0, '→': 0, '噓': 0}
+        for push in push_list:
+            if '推' in push:
+                result['推'] += 1
+            elif '→' in push:
+                result['→'] += 1
+            else:
+                result['噓'] += 1
+        return result
 
 if __name__ == '__main__':
-    p = PTTcrawler('https://www.ptt.cc/bbs/Gossiping/M.1708973754.A.76A.html')
-    print(p.content())
+    p = PTTcrawler('https://www.ptt.cc/bbs/Marginalman/M.1707657661.A.48A.html')
+    print(p.count_push())
 
         
 
