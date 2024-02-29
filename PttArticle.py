@@ -3,15 +3,9 @@ import re
 from bs4 import BeautifulSoup
 
 class PttArticle:
-    limited = ['Gossiping', 'Sex']
     def __init__(self, url:str):
         self.url = url
-
-        for billboard in self.limited:
-            self.headers = {'cookie': 'over18=1;'}
-            break
-        else:
-            self.headers = None
+        self.headers = {'cookie': 'over18=1;'}
 
         try:
             response = requests.get(self.url, headers = self.headers)
