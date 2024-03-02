@@ -49,11 +49,13 @@ class ArticleInfo_Extractor:
     
     def __GetPageURL(self, soup):
         url = None
-        url_tags = soup.find_all('span', class_ = 'f2')
+        url_tags = soup.find_all('span', class_='f2')
         for tag in url_tags:
-            if '※ 文章網址: ' in tag:
-                url = tag.find('a')['href']
-                break
+            if  tag is not None and '※ 文章網址: ' in tag.text:
+                link_tag = tag.find('a')
+                if link_tag:
+                    url = link_tag['href']
+                    break
         return url
 
     def __GetPostTime(self, soup):
