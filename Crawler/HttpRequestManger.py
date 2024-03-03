@@ -1,6 +1,6 @@
 import requests
 
-class HTTPRequestManager:
+class HttpRequestManager:
     def __init__(self, headers = None):
         self.session = requests.Session()
         if headers is None:
