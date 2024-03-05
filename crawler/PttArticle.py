@@ -39,7 +39,7 @@ class ArticleInfo_Extractor:
         return [u.text for u in content]
 
 if __name__ == '__main__':
-    url = 'https://www.ptt.cc/bbs/Gossiping/M.1709271710.A.20E.html'
+    url = 'https://www.ptt.cc/bbs/Gossiping/M.1684471909.A.07E.html'
     request = HttpRequestManager()
     html = HTMLParser()
     soup = html.parse(request.Get(url).text)
