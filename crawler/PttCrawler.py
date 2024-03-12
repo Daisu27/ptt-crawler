@@ -1,16 +1,11 @@
 import time
 import sys
 from tqdm import tqdm
-from .HttpRequestManger import HttpRequestManager
-from .HtmlParser import HTMLParser
-from .PttArticle import ArticleInfo_Extractor
 from .tool import URL, FindIndex, PrevPageURL, IsToday
 
 class PttCrawler:    
-    def __init__(self):
-        self.http_manager = HttpRequestManager()
-        self.html_parser = HTMLParser()
-        self.data_extractor = ArticleInfo_Extractor()
+    def __init__(self, board: str):
+        url = URL(board)
         self.articles = []
 
     def crawl(self, Board: str, keyw: str, n: int = 0):

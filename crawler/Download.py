@@ -2,10 +2,10 @@ import os
 import re
 import requests
 from tqdm import tqdm
-from .PttArticle import ArticleInfo
+from .PttArticle import Article
 
 
-def download_image(article: ArticleInfo) -> None:
+def download_image_in_article(article: Article) -> None:
     if not article.title:
         title = '沒有標題'
     else:
@@ -22,8 +22,7 @@ def download_image(article: ArticleInfo) -> None:
                              'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
         }
         img = requests.get(url, headers = headers)
-        with open(os.path.join(title, f"圖{index+1}.{filename_ext}"), "wb") as file: 
-            print(img.content)
+        with open(os.path.join(title, f"圖{index+1}.jpg"), "wb") as file: 
             file.write(img.content)
         index += 1
 

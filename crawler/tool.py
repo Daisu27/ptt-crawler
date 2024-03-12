@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from os.path import basename
 
-def URL(BillboardName: str) -> str:
-    url = 'https://www.ptt.cc/bbs/' + BillboardName + '/index.html'
+def URL(boardname: str) -> str:
+    url = 'https://www.ptt.cc/bbs/' + boardname + '/index.html'
     return url 
 
 def FindIndex(url: str) -> int:

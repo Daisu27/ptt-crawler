@@ -1,28 +1,19 @@
-import re
+import requests
+from bs4 import BeautifulSoup as bs
 from datetime import datetime
-from .HttpRequestManger import HttpRequestManager
-from .HtmlParser import HTMLParser
-from dataclasses import dataclass, field
 
-@dataclass
-class ArticleInfo:
-    title: str = None
-    author: str = None
-    board: str = None
-    time :str= None
-    content: str = None
-    push: list= field(default_factory=list)
-    
-class ArticleInfo_Extractor:
-    def __call__(self, soup) -> ArticleInfo:
+class Article:
+    def __init__(self, url):
+        response = requests.get(url, headers = {'cookie': 'over18=1;'})
+        soup = bs(response.text, 'html.parser')
         header = soup.find_all('span','article-meta-value')
-        author = header[0].text
-        board = header[1].text
-        title = header[2].text
-        time = datetime.strptime(header[3].text, "%a %b %d %H:%M:%S %Y")
-        content = self.__GetContent(soup)
-        push = self.__GetPush(soup)
-        return ArticleInfo(title, author, board, time, content, push)
+
+        self.author = header[0].text
+        self.board = header[1].text
+        self.title = header[2].text
+        self.time = datetime.strptime(header[3].text, "%a %b %d %H:%M:%S %Y")
+        self.content = self.__GetContent(soup)
+        self.push = self.__GetPush(soup)
 
     def __GetContent(self, soup) -> str:
         content_html = soup.find('div', id='main-content', class_='bbs-screen bbs-content')
@@ -34,16 +25,13 @@ class ArticleInfo_Extractor:
             content += line + '\n' 
         return content.strip()
     
-    def __GetPush(self, soup) -> list[str]:
+    def __GetPush(self, soup) -> list[list[str]]:
         content = soup.find_all('div', class_='push')
-        return [u.text for u in content]
+        push = [u.text for u in content]
+        return push
 
 if __name__ == '__main__':
-    url = 'https://www.ptt.cc/bbs/Gossiping/M.1684471909.A.07E.html'
-    request = HttpRequestManager()
-    html = HTMLParser()
-    soup = html.parse(request.Get(url).text)
-    article = ArticleInfo_Extractor()
-    art = article(soup)
-    print(art.time)
+    article = Article('https://www.ptt.cc/bbs/C_Chat/M.1710226285.A.19E.html')
+    for push in article.push:
+        print(push)
     
