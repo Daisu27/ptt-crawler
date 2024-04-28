@@ -29,6 +29,19 @@ class Article:
         content = soup.find_all('div', class_='push')
         push = [u.text for u in content]
         return push
+    
+    def find_key_in_title(self, keyw: str) -> bool:
+        if keyw in self.title:
+            return True
+        return False
+    
+    def find_key_in_content(self, keyw: str) -> bool:
+        if keyw in self.content:
+            return True
+        return False
+    
+    
+
 
 if __name__ == '__main__':
     article = Article('https://www.ptt.cc/bbs/C_Chat/M.1710226285.A.19E.html')
